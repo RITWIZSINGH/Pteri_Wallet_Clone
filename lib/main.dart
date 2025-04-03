@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:pteri_wallet_clone/providers/theme_provider.dart';
+import 'package:pteri_wallet_clone/screens/confirm_passcode_screen.dart';
 import 'package:pteri_wallet_clone/screens/intro_screen.dart';
+import 'package:pteri_wallet_clone/screens/passcode_screen.dart';
+import 'package:pteri_wallet_clone/screens/terms_and_conditions_screen.dart';
+import 'package:pteri_wallet_clone/screens/wallet_dashboard_screen.dart';
+import 'package:pteri_wallet_clone/screens/wallet_name_screen.dart';
 
 void main() {
   runApp(
@@ -25,7 +30,12 @@ class PteriWalletApp extends StatelessWidget {
           theme: themeProvider.isDarkMode ? _darkTheme : _lightTheme,
           initialRoute: '/',
           routes: {
-            '/': (context) =>  IntroScreen(),
+            '/': (context) => IntroScreen(),
+            '/terms': (context) => TermsAndConditionsScreen(),
+            '/wallet_name': (context) => WalletNameScreen(),
+            '/passcode': (context) => PasscodeScreen(),
+            '/confirm_passcode': (context) => ConfirmPasscodeScreen(),
+            '/dashboard': (context) => DashboardScreen(),
           },
         );
       },
@@ -41,7 +51,7 @@ final _lightTheme = ThemeData(
     backgroundColor: Colors.purple,
     foregroundColor: Colors.white,
   ),
-  elevatedButtonTheme: ElevatedButtonThemeData( 
+  elevatedButtonTheme: ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
       backgroundColor: Colors.purple,
       foregroundColor: Colors.white,

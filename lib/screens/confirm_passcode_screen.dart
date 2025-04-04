@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -88,7 +90,6 @@ class _ConfirmPasscodeScreenState extends State<ConfirmPasscodeScreen>
       if (response['successful']) {
         // Store wallet data
         await WalletService.saveWalletData(_confirmPasscode, walletName);
-
         // Add animation before navigation
         _animationController.reverse().then((_) {
           Navigator.pushReplacementNamed(context, '/dashboard',

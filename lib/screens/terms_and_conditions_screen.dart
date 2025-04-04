@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api, use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:pteri_wallet_clone/providers/theme_provider.dart';
@@ -58,18 +60,20 @@ class _TermsAndConditionsScreenState extends State<TermsAndConditionsScreen>
 
   // Handle back navigation with animation
   Future<void> _handleBackNavigation() async {
-    _animationController.reverse();
-  Navigator.of(context).pop();
+    print('Handling back navigation'); // Debug print
+    await _animationController.reverse();
+    Navigator.pushNamed(context, '/');
   }
 
   @override
   Widget build(BuildContext context) {
-    
     final themeProvider = Provider.of<ThemeProvider>(context);
-    return WillPopScope(
-      onWillPop: () async {
-        await _handleBackNavigation();
-        return false; // We handle the pop manually
+    return PopScope(
+      canPop: false, // Prevents default back navigation
+      onPopInvokedWithResult: (didPop, result) async {
+        if (!didPop) {
+          await _handleBackNavigation(); // Handle back navigation manually
+        }
       },
       child: Scaffold(
         extendBodyBehindAppBar: true,
@@ -77,19 +81,18 @@ class _TermsAndConditionsScreenState extends State<TermsAndConditionsScreen>
           elevation: 0,
           backgroundColor: Colors.transparent,
           leading: IconButton(
-            icon: Icon(Icons.arrow_back_ios, color: themeProvider.isDarkMode ? Colors.white: const Color(0xff1a1a2e)),
-            onPressed: _handleBackNavigation,
+            icon: Icon(Icons.arrow_back_ios,
+                color: themeProvider.isDarkMode
+                    ? Colors.white
+                    : const Color(0xff1a1a2e)),
+            onPressed: _handleBackNavigation, // Trigger manual back navigation
           ),
-          title: Row(
-            children: const [
-              Text(
-                'Terms and Conditions',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
+          title: const Text(
+            'Terms and Conditions',
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
         body: Container(
@@ -202,11 +205,13 @@ class _TermsAndConditionsScreenState extends State<TermsAndConditionsScreen>
                     children: [
                       CheckboxListTile(
                         title: Text(
-                          'I agree to the terms and conditions',
+                          'I agree to the terms and conditions.',
                           style: TextStyle(
                             color: Colors.white,
-                            fontWeight:
-                                _isChecked ? FontWeight.bold : FontWeight.normal,
+                            fontSize: 15,
+                            fontWeight: _isChecked
+                                ? FontWeight.bold
+                                : FontWeight.normal,
                           ),
                         ),
                         value: _isChecked,
@@ -227,7 +232,8 @@ class _TermsAndConditionsScreenState extends State<TermsAndConditionsScreen>
                             : null,
                       ),
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 24.0),
+                        padding:
+                            const EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 24.0),
                         child: Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(28),
@@ -245,7 +251,6 @@ class _TermsAndConditionsScreenState extends State<TermsAndConditionsScreen>
                           child: ElevatedButton(
                             onPressed: _isChecked
                                 ? () {
-                                    // Add a fade-out animation before navigation
                                     _animationController.reverse().then((_) {
                                       Navigator.pushNamed(
                                           context, '/wallet_name');
@@ -295,9 +300,10 @@ class _TermsAndConditionsScreenState extends State<TermsAndConditionsScreen>
                               child: Container(
                                 width: double.infinity,
                                 alignment: Alignment.center,
-                                padding: const EdgeInsets.symmetric(vertical: 12),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 12),
                                 child: const Text(
-                                  'Accept',
+                                  'ACCEPT',
                                   style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,

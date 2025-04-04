@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'dart:ui';
 
+import 'package:flutter/services.dart';
+
 class WalletNameScreen extends StatefulWidget {
   const WalletNameScreen({Key? key}) : super(key: key);
 
@@ -54,7 +56,7 @@ class _WalletNameScreenState extends State<WalletNameScreen>
         backgroundColor: Colors.transparent,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () => Navigator.pushNamed(context, '/terms'),
         ),
         title: const Text(
           'New Wallet',
@@ -117,55 +119,53 @@ class _WalletNameScreenState extends State<WalletNameScreen>
                   const SizedBox(height: 40),
                   // Enhanced text field with animations
                   Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.purple.withOpacity(0.3),
-                          blurRadius: 8,
-                          spreadRadius: 2,
-                        ),
-                      ],
-                    ),
-                    child: TextField(
-                      controller: _walletNameController,
-                      style: const TextStyle(color: Colors.white),
-                      decoration: InputDecoration(
-                        labelText: 'Wallet Name',
-                        labelStyle: TextStyle(
-                          color: Colors.white.withOpacity(0.7),
-                        ),
-                        filled: true,
-                        fillColor: Colors.white.withOpacity(0.1),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(16),
-                          borderSide: BorderSide(
-                            color: Colors.white.withOpacity(0.3),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.purple.withOpacity(0.3),
+                            blurRadius: 8,
+                            spreadRadius: 2,
                           ),
-                        ),
-                        // focusedBorder: OutlineInputBorder(
-                        //   borderRadius: BorderRadius.circular(16),
-                        //   borderSide: const BorderSide(
-                        //     color: Color(0xFF3A86FF),
-                        //     width: 2,
-                        //   ),
-                        // ),
-                        // enabledBorder: OutlineInputBorder(
-                        //   borderRadius: BorderRadius.circular(16),
-                        //   borderSide: BorderSide(
-                        //     color: Colors.white.withOpacity(0.3),
-                        //   ),
-                        // ),
-                        suffixIcon: IconButton(
-                          icon: Icon(
-                            Icons.clear,
+                        ],
+                      ),
+                      child: TextField(
+                        controller: _walletNameController,
+                        style: const TextStyle(color: Colors.white),
+                        // Prevent spaces with input formatter
+                        inputFormatters: [
+                          FilteringTextInputFormatter.deny(
+                              RegExp(r'\s')), // Denies any whitespace
+                        ],
+                        // Set keyboard type to limit input options
+                        keyboardType: TextInputType.name,
+                        decoration: InputDecoration(
+                          labelText: 'Wallet Name',
+                          labelStyle: TextStyle(
                             color: Colors.white.withOpacity(0.7),
                           ),
-                          onPressed: () => _walletNameController.clear(),
+                          hintText: 'Enter wallet name (no spaces)',
+                          hintStyle: TextStyle(
+                            color: Colors.white.withOpacity(0.5),
+                          ),
+                          filled: true,
+                          fillColor: Colors.white.withOpacity(0.1),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(16),
+                            borderSide: BorderSide(
+                              color: Colors.white.withOpacity(0.3),
+                            ),
+                          ),
+                          // Your commented border code remains the same
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              Icons.clear,
+                              color: Colors.white.withOpacity(0.7),
+                            ),
+                            onPressed: () => _walletNameController.clear(),
+                          ),
                         ),
-                      ),
-                    ),
-                  ),
+                      )),
                   const SizedBox(height: 50),
                   // Enhanced Next button with animations
                   Center(
@@ -208,9 +208,9 @@ class _WalletNameScreenState extends State<WalletNameScreen>
                             borderRadius: BorderRadius.circular(28),
                           ),
                         ).copyWith(
-                          backgroundColor: MaterialStateProperty.resolveWith(
+                          backgroundColor: WidgetStateProperty.resolveWith(
                             (states) {
-                              if (states.contains(MaterialState.disabled)) {
+                              if (states.contains(WidgetState.disabled)) {
                                 return Colors.grey.withOpacity(0.1);
                               }
                               return Colors.transparent;
@@ -239,7 +239,7 @@ class _WalletNameScreenState extends State<WalletNameScreen>
                             alignment: Alignment.center,
                             padding: const EdgeInsets.symmetric(vertical: 16),
                             child: const Text(
-                              'Next',
+                              'NEXT',
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,

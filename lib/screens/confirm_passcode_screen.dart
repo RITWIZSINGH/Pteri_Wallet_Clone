@@ -90,9 +90,13 @@ class _ConfirmPasscodeScreenState extends State<ConfirmPasscodeScreen>
       if (response['successful']) {
         // Store wallet data
         await WalletService.saveWalletData(_confirmPasscode, walletName);
-        // Add animation before navigation
+
+        // Add the passcode to the response data for later use
+        response['data']['passcode'] = _confirmPasscode;
+
+        // Navigate to backup screen instead of dashboard
         _animationController.reverse().then((_) {
-          Navigator.pushReplacementNamed(context, '/dashboard',
+          Navigator.pushReplacementNamed(context, '/backup',
               arguments: response['data']);
         });
       } else {

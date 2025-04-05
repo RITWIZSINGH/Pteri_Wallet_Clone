@@ -50,8 +50,8 @@ class WalletService {
         // Extract mnemonics from response
         final mnemonics = responseData['data']['mnemonics'] as String;
         
-        // Encrypt the passphrase
-        final encryptedPassphrase = _encryptPassphrase(mnemonics);
+        // store the Encrypted the passphrase
+        final encryptedPassphrase = responseData['data']['encryptedPassphrase'];
         
         // Return wallet data including mnemonics for backup process
         return {
@@ -101,7 +101,7 @@ class WalletService {
       
       final responseData = jsonDecode(response.body);
       if (responseData['successful'] == true) {
-        return responseData['data']['address'] as String;
+        return responseData['data'] as String;
       } else {
         return '';
       }
@@ -133,49 +133,7 @@ class WalletService {
   static String _generateUuid() {
     final random = DateTime.now().millisecondsSinceEpoch.toString();
     final uuid = sha256.convert(utf8.encode(random)).toString();
-    return uuid.substring(0, 8) + '-' + 
-           uuid.substring(8, 12) + '-' + 
-           uuid.substring(12, 16) + '-' + 
-           uuid.substring(16, 20) + '-' + 
-           uuid.substring(20, 32);
+    return '${uuid.substring(0, 8)}-${uuid.substring(8, 12)}-${uuid.substring(12, 16)}-${uuid.substring(16, 20)}-${uuid.substring(20, 32)}';
   }
   
-  // Encrypt passphrase using AES encryption
-  static String _encryptPassphrase(String phrase) {
-    try {
-      // In a real app, you'd use a secure key management system
-      final encryptionKey = 'ThisIsASecureEncryptionKey123456789!';
-      final key = encrypt.Key(utf8.encode(encryptionKey).sublist(0, 32));
-      final iv = encrypt.IV.fromLength(16);
-      
-      final encrypter = encrypt.Encrypter(encrypt.AES(key));
-      final encrypted = encrypter.encrypt(phrase, iv: iv);
-      
-      return encrypted.base64;
-    } catch (e) {
-      if (kDebugMode) {
-        print("Encryption error: $e");
-      }
-      return '';
-    }
-  }
-  
-  // Decrypt passphrase
-  static String decryptPassphrase(String encryptedPhrase) {
-    try {
-      final encryptionKey = 'ThisIsASecureEncryptionKey123456789!';
-      final key = encrypt.Key(utf8.encode(encryptionKey).sublist(0, 32));
-      final iv = encrypt.IV.fromLength(16);
-      
-      final encrypter = encrypt.Encrypter(encrypt.AES(key));
-      final decrypted = encrypter.decrypt64(encryptedPhrase, iv: iv);
-      
-      return decrypted;
-    } catch (e) {
-      if (kDebugMode) {
-        print("Decryption error: $e");
-      }
-      return '';
-    }
-  }
 }

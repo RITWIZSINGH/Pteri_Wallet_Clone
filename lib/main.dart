@@ -2,8 +2,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:pteri_wallet_clone/screens/backup_info_screen.dart';
+import 'package:pteri_wallet_clone/screens/backup_screen.dart';
 import 'package:pteri_wallet_clone/screens/confirm_passcode_screen.dart';
 import 'package:pteri_wallet_clone/screens/passcode_screen.dart';
+import 'package:pteri_wallet_clone/screens/show_mnemonic_screen.dart';
+import 'package:pteri_wallet_clone/screens/verify_mnemonic_screen.dart';
 import 'package:pteri_wallet_clone/screens/wallet_dashboard_screen.dart';
 
 import 'providers/theme_provider.dart';
@@ -12,12 +16,11 @@ import 'screens/terms_and_conditions_screen.dart';
 import 'screens/wallet_name_screen.dart';
 // Import other screens as needed
 
-
 final RouteObserver<ModalRoute> routeObserver = RouteObserver<ModalRoute>();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
+
   runApp(
     ChangeNotifierProvider(
       create: (_) => ThemeProvider(),
@@ -39,12 +42,16 @@ class PteriWalletApp extends StatelessWidget {
           theme: themeProvider.isDarkMode ? _darkTheme : _lightTheme,
           initialRoute: '/',
           routes: {
-            '/': (context) =>  const IntroScreen(),
+            '/': (context) => const IntroScreen(),
             '/terms': (context) => const TermsAndConditionsScreen(),
             '/wallet_name': (context) => const WalletNameScreen(),
-            '/passcode': (context) =>  const PasscodeScreen(),
-            '/confirm_passcode': (context) =>  const ConfirmPasscodeScreen(),
-            '/dashboard': (context) =>  const DashboardScreen(),
+            '/passcode': (context) => const PasscodeScreen(),
+            '/backup_info': (context) => const BackupInfoScreen(),
+            '/backup': (context) => const BackupScreen(), 
+            '/show_mnemonic': (context) => const ShowMnemonicScreen(),
+            '/verify_mnemonic': (context) => const VerifyMnemonicScreen(),
+            '/confirm_passcode': (context) => const ConfirmPasscodeScreen(),
+            '/dashboard': (context) => const DashboardScreen(),
           },
           navigatorObservers: [routeObserver],
         );
@@ -52,7 +59,6 @@ class PteriWalletApp extends StatelessWidget {
     );
   }
 }
-
 
 // Dark Theme Definition (Default)
 final _darkTheme = ThemeData(
